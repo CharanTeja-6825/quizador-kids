@@ -6,6 +6,7 @@ import UserAvatar from "@/components/ui/UserAvatar";
 import ProgressCircle from "@/components/ui/ProgressCircle";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ArrowUpRight, Award, Book, BookOpen, Brain, CheckCircle, Clock, HelpCircle, Star, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { LessonProps } from "@/components/ui/LessonCard";
