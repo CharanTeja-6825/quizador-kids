@@ -12,7 +12,8 @@ import {
   Menu, 
   ChevronDown, 
   PieChart,
-  User
+  User,
+  Settings
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -27,6 +28,7 @@ interface NavItem {
   name: string;
   href: string;
   icon: React.ReactNode;
+  roles?: string[];
 }
 
 const Navbar: React.FC = () => {
@@ -41,7 +43,18 @@ const Navbar: React.FC = () => {
     { name: "Dashboard", href: "/dashboard", icon: <PieChart size={18} /> },
     { name: "Lessons", href: "/lessons", icon: <Book size={18} /> },
     { name: "Quizzes", href: "/quizzes", icon: <HelpCircle size={18} /> },
+    { 
+      name: "Admin", 
+      href: "/admin", 
+      icon: <Settings size={18} />,
+      roles: ["parent"] 
+    },
   ];
+
+  // Filter nav items based on user role
+  const filteredNavItems = NAV_ITEMS.filter(item => 
+    !item.roles || (currentUser && item.roles.includes(currentUser.role))
+  );
 
   // Track scroll position for styling
   useEffect(() => {
@@ -85,13 +98,13 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-1">
-          {NAV_ITEMS.map((item) => (
+          {filteredNavItems.map((item) => (
             <button
               key={item.name}
               onClick={() => navigate(item.href)}
               className={cn(
                 "flex items-center px-4 py-2 rounded-full text-sm font-medium transition-all",
-                location.pathname === item.href
+                location.pathname === item.href || location.pathname.startsWith(`${item.href}/`)
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:bg-muted"
               )}
@@ -162,7 +175,7 @@ const Navbar: React.FC = () => {
         >
           <div className="container mx-auto max-w-7xl">
             <nav className="flex flex-col px-4 py-2 space-y-1">
-              {NAV_ITEMS.map((item) => (
+              {filteredNavItems.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => {
@@ -171,7 +184,7 @@ const Navbar: React.FC = () => {
                   }}
                   className={cn(
                     "flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all",
-                    location.pathname === item.href
+                    location.pathname === item.href || location.pathname.startsWith(`${item.href}/`)
                       ? "bg-primary/10 text-primary"
                       : "text-muted-foreground hover:bg-muted"
                   )}
