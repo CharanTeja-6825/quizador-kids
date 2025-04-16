@@ -1,11 +1,12 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-type UserRole = "child" | "parent";
+type UserRole = "student" | "parent";
 
 interface User {
   id: string;
   name: string;
+  email: string;
   role: UserRole;
   avatar: string;
 }
@@ -23,27 +24,11 @@ interface ProgressData {
 interface UserContextType {
   currentUser: User | null;
   progress: ProgressData;
-  switchUser: (role: UserRole) => void;
   isAuthenticated: boolean;
-  login: () => void;
+  register: (data: { name: string; email: string; password: string; role: UserRole }) => void;
+  login: (data: { email: string; password: string; role: UserRole }) => void;
   logout: () => void;
 }
-
-// Sample data
-const SAMPLE_USERS: Record<UserRole, User> = {
-  child: {
-    id: "child-1",
-    name: "Alex",
-    role: "child",
-    avatar: "https://api.dicebear.com/7.x/adventurer/svg?seed=Alex&backgroundColor=b6e3f4",
-  },
-  parent: {
-    id: "parent-1",
-    name: "Taylor",
-    role: "parent",
-    avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Taylor&backgroundColor=d1d4f9",
-  },
-};
 
 const INITIAL_PROGRESS: ProgressData = {
   lessonsCompleted: 3,
@@ -55,6 +40,9 @@ const INITIAL_PROGRESS: ProgressData = {
   stars: 14,
 };
 
+// Simulate a users database
+let USERS_DB: User[] = [];
+
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -62,20 +50,30 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [progress, setProgress] = useState<ProgressData>(INITIAL_PROGRESS);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // For demo purposes, auto-login as child
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setCurrentUser(SAMPLE_USERS.child);
-      setIsAuthenticated(true);
+  const register = (data: { name: string; email: string; password: string; role: UserRole }) => {
+    const existingUser = USERS_DB.find(user => user.email === data.email);
+    if (existingUser) {
+      throw new Error("Email already registered");
     }
-  }, [isAuthenticated]);
 
-  const switchUser = (role: UserRole) => {
-    setCurrentUser(SAMPLE_USERS[role]);
+    const newUser: User = {
+      id: `user-${Date.now()}`,
+      name: data.name,
+      email: data.email,
+      role: data.role,
+      avatar: `https://api.dicebear.com/7.x/${data.role === 'student' ? 'adventurer' : 'personas'}/svg?seed=${data.name}`,
+    };
+
+    USERS_DB.push(newUser);
   };
 
-  const login = () => {
-    setCurrentUser(SAMPLE_USERS.child);
+  const login = (data: { email: string; password: string; role: UserRole }) => {
+    const user = USERS_DB.find(u => u.email === data.email && u.role === data.role);
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+
+    setCurrentUser(user);
     setIsAuthenticated(true);
   };
 
@@ -89,8 +87,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       value={{
         currentUser,
         progress,
-        switchUser,
         isAuthenticated,
+        register,
         login,
         logout,
       }}
