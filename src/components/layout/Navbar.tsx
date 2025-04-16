@@ -122,7 +122,7 @@ const Navbar: React.FC = () => {
               <button className="flex items-center gap-2 rounded-full bg-white/80 pl-2 pr-3 py-1 shadow-sm border border-border/50 hover:shadow transition-all">
                 <UserAvatar
                   name={currentUser?.name || ""}
-                  role={currentUser?.role || "child"}
+                  role={currentUser?.role || "student"}
                   avatarUrl={currentUser?.avatar || ""}
                   size="sm"
                 />
@@ -135,10 +135,10 @@ const Navbar: React.FC = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="flex items-center cursor-pointer"
-                onClick={() => switchUser("child")}
+                onClick={() => switchUser("student")}
               >
                 <User size={16} className="mr-2 text-kid-blue" />
-                <span>Child Profile</span>
+                <span>Student Profile</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center cursor-pointer"

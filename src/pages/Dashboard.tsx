@@ -112,7 +112,7 @@ const Dashboard = () => {
             <div className="flex items-center gap-3">
               <UserAvatar
                 name={currentUser?.name || ""}
-                role={currentUser?.role || "child"}
+                role={currentUser?.role || "student"}
                 avatarUrl={currentUser?.avatar || ""}
                 size="lg"
                 showRole

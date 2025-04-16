@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
-type UserRole = "student" | "parent";
+export type UserRole = "student" | "parent";
 
 interface User {
   id: string;
@@ -28,6 +28,7 @@ interface UserContextType {
   register: (data: { name: string; email: string; password: string; role: UserRole }) => void;
   login: (data: { email: string; password: string; role: UserRole }) => void;
   logout: () => void;
+  switchUser: (role: "student" | "parent") => void;
 }
 
 const INITIAL_PROGRESS: ProgressData = {
@@ -82,6 +83,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(false);
   };
 
+  // Add the switchUser function
+  const switchUser = (role: "student" | "parent") => {
+    // In a real app, this would switch between different user profiles
+    // For now, we'll just console log that it was called
+    console.log(`Switching to ${role} profile`);
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -91,6 +99,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         login,
         logout,
+        switchUser,
       }}
     >
       {children}

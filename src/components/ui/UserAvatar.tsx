@@ -3,10 +3,11 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { UserRole } from "@/context/UserContext";
 
 interface UserAvatarProps {
   name: string;
-  role: "child" | "parent";
+  role: UserRole | "child";
   avatarUrl: string;
   size?: "sm" | "md" | "lg";
   showRole?: boolean;
@@ -32,6 +33,9 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     .map((part) => part.charAt(0).toUpperCase())
     .join("");
 
+  // Determine styles based on role (student or parent)
+  const isStudent = role === "student" || role === "child";
+
   return (
     <div className={cn("relative inline-block", className)}>
       <Avatar
@@ -39,14 +43,14 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
           sizeClasses[size],
           "ring-2 ring-white shadow-md",
           "transition-all duration-300 ease-out hover:scale-105",
-          role === "child" ? "ring-kid-blue" : "ring-kid-purple"
+          isStudent ? "ring-kid-blue" : "ring-kid-purple"
         )}
       >
         <AvatarImage src={avatarUrl} alt={name} className="object-cover" />
         <AvatarFallback
           className={cn(
             "font-semibold",
-            role === "child" ? "bg-kid-blue text-white" : "bg-kid-purple text-white"
+            isStudent ? "bg-kid-blue text-white" : "bg-kid-purple text-white"
           )}
         >
           {initials}
@@ -58,12 +62,12 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
           variant="outline"
           className={cn(
             "absolute -bottom-2 left-1/2 transform -translate-x-1/2 capitalize px-2 text-xs font-medium",
-            role === "child" 
+            isStudent
               ? "bg-kid-blue/10 text-kid-blue border-kid-blue/30" 
               : "bg-kid-purple/10 text-kid-purple border-kid-purple/30"
           )}
         >
-          {role}
+          {role === "child" ? "student" : role}
         </Badge>
       )}
     </div>

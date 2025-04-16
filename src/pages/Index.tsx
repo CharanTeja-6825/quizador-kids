@@ -20,6 +20,11 @@ const Index = () => {
     }, 1000);
   }, []);
   
+  // Sample credentials for demo login
+  const demoLogin = () => {
+    login({ email: "demo@example.com", password: "password", role: "student" });
+  };
+  
   const features = [
     {
       icon: <BookOpen className="text-kid-blue" size={24} />,
@@ -71,7 +76,7 @@ const Index = () => {
                 <Button
                   size="lg"
                   className="button-primary"
-                  onClick={() => isAuthenticated ? navigate("/dashboard") : login()}
+                  onClick={() => isAuthenticated ? navigate("/dashboard") : navigate("/login")}
                 >
                   {isAuthenticated ? "Go to Dashboard" : "Get Started"}
                 </Button>
@@ -144,7 +149,7 @@ const Index = () => {
             <Button 
               size="lg" 
               className="button-primary"
-              onClick={() => isAuthenticated ? navigate("/dashboard") : login()}
+              onClick={() => isAuthenticated ? navigate("/dashboard") : navigate("/login")}
             >
               {isAuthenticated ? "Go to Dashboard" : "Get Started Now"}
             </Button>

@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useUser } from "@/context/UserContext";
+import { useUser, UserRole } from "@/context/UserContext";
 import { toast } from "sonner";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 
@@ -22,7 +22,7 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
-    role: "student",
+    role: "student" as UserRole,
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -113,7 +113,7 @@ const Register = () => {
               <Label htmlFor="role">I am a</Label>
               <Select
                 value={formData.role}
-                onValueChange={(value) =>
+                onValueChange={(value: UserRole) =>
                   setFormData({ ...formData, role: value })
                 }
               >
